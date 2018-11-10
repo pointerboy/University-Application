@@ -11,51 +11,59 @@ import java.util.Scanner;
 class Student {
 
 
-    static void list() throws IOException {
-        FileReader input = new FileReader("students.data");
-        BufferedReader buffReader = new BufferedReader(input);
+    static void list() {
+        try {
+            FileReader input = new FileReader("students.data");
+            BufferedReader buffReader = new BufferedReader(input);
 
-        String currentLine = null;
-        String studentStatus = null; // Is student present or not.
-        String studentName = null;
-        String dateOfBirth = null;
+            String currentLine = null;
+            String studentStatus = null; // Is student present or not.
+            String studentName = null;
+            String dateOfBirth = null;
 
-        while ((currentLine = buffReader.readLine()) != null) {
-            studentName = currentLine.substring(currentLine.indexOf(":") + 1, currentLine.indexOf(":["));
-            studentStatus = currentLine.substring(currentLine.indexOf("Status:") + 7, currentLine.indexOf(";"));
-            dateOfBirth = currentLine.substring(currentLine.indexOf("Birth:") + 6, currentLine.indexOf(";"));
+            while ((currentLine = buffReader.readLine()) != null) {
+                studentName = currentLine.substring(currentLine.indexOf(":") + 1, currentLine.indexOf(":["));
+                studentStatus = currentLine.substring(currentLine.indexOf("Status:") + 7, currentLine.indexOf(";"));
+                dateOfBirth = currentLine.substring(currentLine.indexOf("Birth:") + 6, currentLine.indexOf(";"));
 
-            System.out.println(String.format("Student: %s\n |> Status: %s\n |> Birthday %s\n", studentName, studentStatus, dateOfBirth));
+                System.out.println(String.format("Student: %s\n |> Status: %s\n |> Birthday %s\n", studentName, studentStatus, dateOfBirth));
+            }
+
+            buffReader.close();
+        } catch (Exception e) {
+            System.out.println("An error has occured while trying to list students. Error code " + e);
         }
-
-        buffReader.close();
     }
 
-    static void add() throws IOException {
-        Scanner scan = new Scanner(System.in);
+    static void add() {
+        try {
+            Scanner scan = new Scanner(System.in);
 
-        System.out.println("Student's First Name: ");
-        String studentFirstName = scan.nextLine();
-        System.out.println("Student's Last Name: ");
-        String studentLastName = scan.nextLine();
+            System.out.println("Student's First Name: ");
+            String studentFirstName = scan.nextLine();
+            System.out.println("Student's Last Name: ");
+            String studentLastName = scan.nextLine();
 
-        FileReader input = new FileReader("students.data");
-        BufferedReader buffReader = new BufferedReader(input);
+            FileReader input = new FileReader("students.data");
+            BufferedReader buffReader = new BufferedReader(input);
 
-        String currentLine = null;
+            String currentLine = null;
 
-        int fileLine = 0;
+            int fileLine = 0;
 
-        while ((currentLine = buffReader.readLine()) != null) {
-            fileLine++;
+            while ((currentLine = buffReader.readLine()) != null) {
+                fileLine++;
+            }
+
+            String line = String.format("\n(%d) [%s %s]", fileLine++, studentFirstName, studentLastName);
+            Files.write(Paths.get("students.data"), line.getBytes(), StandardOpenOption.APPEND);
+
+            buffReader.close();
+
+            System.out.println("User has been added!");
+        } catch (IOException e) {
+            System.out.println("An error has occured while trying to add a student. Error code " + e);
         }
-
-        String line = String.format("\n(%d) [%s %s]", fileLine++, studentFirstName, studentLastName);
-        Files.write(Paths.get("students.data"), line.getBytes(), StandardOpenOption.APPEND);
-
-        buffReader.close();
-
-        System.out.println("User has been added!");
 
     }
 }
