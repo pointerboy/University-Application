@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 class Student {
 
-
     static void list() {
         try {
             FileReader input = new FileReader("students.data");
@@ -23,10 +22,9 @@ class Student {
 
             while ((currentLine = buffReader.readLine()) != null) {
                 studentName = currentLine.substring(currentLine.indexOf(":") + 1, currentLine.indexOf(":["));
-                studentStatus = currentLine.substring(currentLine.indexOf("Status:") + 7, currentLine.indexOf(";"));
-                dateOfBirth = currentLine.substring(currentLine.indexOf("Birth:") + 6, currentLine.indexOf(";"));
+                dateOfBirth = currentLine.substring(currentLine.indexOf("Birth:") + 6, currentLine.indexOf("]"));
 
-                System.out.println(String.format("Student: %s\n |> Status: %s\n |> Birthday %s\n", studentName, studentStatus, dateOfBirth));
+                System.out.println(String.format("Student: %s\n |> Status: Active\n |> Birthday %s\n", studentName, dateOfBirth));
             }
 
             buffReader.close();
@@ -55,7 +53,7 @@ class Student {
                 fileLine++;
             }
 
-            String line = String.format("\n(%d) [%s %s]", fileLine++, studentFirstName, studentLastName);
+            String line = String.format("\n(%d):%s %s:[Birth:undefined];", fileLine++, studentFirstName, studentLastName);
             Files.write(Paths.get("students.data"), line.getBytes(), StandardOpenOption.APPEND);
 
             buffReader.close();
